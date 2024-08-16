@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 exports.up = knex => knex.schema.createTable("movie_notes", (table) => {
   table.increments("id");
 
@@ -6,9 +7,10 @@ exports.up = knex => knex.schema.createTable("movie_notes", (table) => {
 
   table.integer("rating").notNullable().unsigned().checkIn([1,2,3,4,5]);
   table.integer("user_id").references("id").inTable("users");
-  
-  table.timestamp("created_at").default(knex.fn.now());
-  table.timestamp("updated_at").default(knex.fn.now());
+
+  const now = moment().tz('America/Sao_Paulo').format('YYYY-MM-DD HH:mm:ss');
+  table.timestamp("created_at").defaultTo(now);
+  table.timestamp("updated_at").defaultTo(now);
 });
 
 exports.down = knex => knex.schema.dropTable("movie_notes");

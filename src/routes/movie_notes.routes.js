@@ -3,10 +3,12 @@ const MovieNotesController = require("../controllers/MovieNotesController");
 const movieNotesRouter = Router();
 const movieNotesController = new MovieNotesController();
 
-movieNotesRouter.post("/:user_id", movieNotesController.create);
-movieNotesRouter.get("/:id", movieNotesController.show);
-movieNotesRouter.delete("/:id", movieNotesController.delete);
-movieNotesRouter.get("/", movieNotesController.index);
-movieNotesRouter.put("/:id", movieNotesController.update);
+const ensureAuthenticated = require("../middleware/ensureAuthenticated");
+
+movieNotesRouter.post("/", ensureAuthenticated, movieNotesController.create);
+movieNotesRouter.get("/:id", ensureAuthenticated, movieNotesController.show);
+movieNotesRouter.delete("/:id", ensureAuthenticated, movieNotesController.delete);
+movieNotesRouter.get("/", ensureAuthenticated, movieNotesController.index);
+movieNotesRouter.put("/:id", ensureAuthenticated, movieNotesController.update);
 
 module.exports = movieNotesRouter;
